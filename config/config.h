@@ -8,6 +8,8 @@
 #define DB_NAME "data"
 #define DB_EXTENSION ".cson"
 
+#define _MAX_ROW 1
+
 #define DATA_COLUMN_NUM 3
 #define DATA_TEXT_NUM 100
 
