@@ -139,7 +139,4 @@ _CSON updateData(CSON_STRING update, CSON_ROW row) {
   fclose(ptr_file);
 }
 
-
-
-
 #endif
