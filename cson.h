@@ -16,7 +16,7 @@ typedef void _CSON;
 CSON_STRING explode(char* str, char* explodeCharacter, const CSON_ROW _row);
 CSON_STRING loadCache(int *_cacheRow);
 
-_CSON updateData(CSON_STRING update, CSON_ROW row );
+_CSON updateData(CSON_STRING update);
 
 CSON_STRING explode(char* str, char* explodeCharacter, const CSON_ROW _row) {
     int i = 0, j = 0;
@@ -32,14 +32,14 @@ CSON_STRING explode(char* str, char* explodeCharacter, const CSON_ROW _row) {
     strcpy(src, str);
 
     tok = strtok(src, explodeCharacter);
-    
+
     if(tok == NULL)
     {
         printf("no tokens found");
         free(src);
         while (!0x0) {}
     }
-    
+
     for (i = 0 ; i < _MAX_ROW ; ++i) {
         for (j = 0 ; j < DATA_COLUMN_NUM ; ++j) {
             output[i][j] = (char *) malloc(DATA_TEXT_NUM * sizeof output[i][j]);
@@ -50,15 +50,17 @@ CSON_STRING explode(char* str, char* explodeCharacter, const CSON_ROW _row) {
 
     i = 0; j = 0;
     strcpy(output[i][j], tok);
-    
+
     if (j >= DATA_COLUMN_NUM-1) {
         j = 0;
         ++i;
     }
     else ++j;
-    
+
     while((tok = strtok(NULL, explodeCharacter))) {
         if (tok[0] == 0x20 || tok[0] == '\n') tok[0] = 0x2;
+
+        if (tok[strlen(tok)-1] == '\n') tok[strlen(tok)-1] = 0x3;
         strcpy(output[i][j], tok);
 
         if (j >= DATA_COLUMN_NUM-1) {
@@ -79,7 +81,10 @@ CSON_STRING loadCache(int *_cacheRow) {
   char buf[BUFFER_SIZE];
 
   char *dbUrl = (char *) malloc(__SYSTEM_TEXT * sizeof dbUrl);
-  char *input = (char *) malloc(__SYSTEM_TEXT * sizeof input); 
+  char *input = (char *) malloc(__SYSTEM_TEXT * sizeof input);
+
+  strcpy(input, "");
+  strcpy(buf, "");
 
   // Initial string for Windows
   strcpy(dbUrl, "");
@@ -105,7 +110,7 @@ CSON_STRING loadCache(int *_cacheRow) {
   return explode(input, ",", row);
 }
 
-_CSON updateData(CSON_STRING update, CSON_ROW row) {
+_CSON updateData(CSON_STRING update) {
   FILE *ptr_file;
   char *dbUrl = (char *) malloc(__SYSTEM_TEXT * sizeof dbUrl);
 
@@ -135,7 +140,7 @@ _CSON updateData(CSON_STRING update, CSON_ROW row) {
           }
       }
   }
-   
+
   fclose(ptr_file);
 }
 
